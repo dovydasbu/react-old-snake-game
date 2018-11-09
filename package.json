@@ -1,0 +1,10 @@
+{
+  "name": "react-snake",
+  "version": "0.0.1",
+  "description": "Snake game based on react",
+  "main": "index.js",
+  "repository": "https://github.com/dovydasbu/react-snake.git",
+  "author": "dovydasbu",
+  "license": "MIT",
+  "private": false
+}
