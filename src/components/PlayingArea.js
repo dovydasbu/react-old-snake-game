@@ -1,18 +1,18 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import styled from 'styled-components'
 import playImg from '../assets/images/play.png';
-import Field from './Field'
 
 const Area = styled.div`
   border: 6px solid #24252a;
-  width: 802px;
-  height: 502px;
-
+  width: 800px;
+  height: 500px;
+  position: relative;
+  
   ${ props => ! props.isPlaying ? `
     display: flex;
     justify-content: center;
     align-items: center;
-  ` : ''}
+  `: ''}
 `;
 
 const PlayButton = styled.div`
@@ -44,9 +44,7 @@ class PlayingArea extends Component {
     return (
       <Area>
         {isPlaying ? (
-          <Fragment>
-            <Field/>
-          </Fragment>
+          <h1>let's play</h1>
         ) : (
           <PlayButton onClick={this.startPlay} />
         )}
