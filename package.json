@@ -2,9 +2,25 @@
   "name": "react-snake",
   "version": "0.0.1",
   "description": "Snake game based on react",
-  "main": "index.js",
   "repository": "https://github.com/dovydasbu/react-snake.git",
   "author": "dovydasbu",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
+    "react-key-handler": "^1.2.0-beta.3",
+    "react-scripts": "^2.1.1",
+    "styled-components": "^4.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
