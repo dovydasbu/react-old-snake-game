@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
 import Snake from './Snake'
 import Button from './Button'
@@ -49,7 +50,7 @@ class PlayingArea extends Component {
   }
 
   startGame() {
-    this.setState({ isPlaying: true });
+    this.setState({ isPlaying: true, isGameOver: false });
   }
 
   gameOver() {
@@ -65,6 +66,10 @@ class PlayingArea extends Component {
 
     return (
       <Area>
+        <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="Spacebar" onKeyHandle={this.startGame} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue=" " onKeyHandle={this.startGame} />
+
         {isPlaying && (
           <Fragment>
             <Snake onGameOver={this.gameOver} />
