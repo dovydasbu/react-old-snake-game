@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
-import playImg from '../assets/images/play.png';
 import Snake from './Snake'
+import Button from './Button'
 
 export const areaParams = {
   width: 800,
@@ -13,7 +13,7 @@ const Area = styled.div`
   width: ${areaParams.width}px;
   height: ${areaParams.height}px;
   position: relative;
-  box-shadow: 0 11px 70px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 11px 70px rgba(0,0,0,0.515);
   
   ${ props => ! props.isPlaying ? `
     display: flex;
@@ -22,17 +22,7 @@ const Area = styled.div`
   `: ''}
 `;
 
-const PlayButton = styled.div`
-  background: url(${playImg}) no-repeat center center;
-  background-size: cover;
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-`;
-
-const GameOver = styled.div``;
-
-const GameOverTitle = styled.h1`
+const GameTitle = styled.h1`
   font-family: 'Joystix';
   margin: 0;
 `;
@@ -82,14 +72,17 @@ class PlayingArea extends Component {
         )}
 
         {isGameOver && (
-          <GameOver>
-            <GameOverTitle>Game  over</GameOverTitle>
-            <RestartTitle onClick={this.restart}>restart</RestartTitle>
-          </GameOver>
+          <div>
+            <GameTitle>Game  over</GameTitle>
+            <Button onClick={this.restart} text="restart" />
+          </div>
         )}
 
         { ! isPlaying && ! isGameOver && (
-          <PlayButton onClick={this.startGame} />
+          <div>
+            <GameTitle>Snake game</GameTitle>
+            <Button onClick={this.startGame} text="Play" />
+          </div>
         )}
       </Area>
     )

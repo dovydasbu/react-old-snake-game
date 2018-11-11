@@ -34,7 +34,7 @@ export default class Snake extends Component {
     super(props);
 
     this.state = {
-      speed: 0.8, // in seconds
+      speed: 0.1, // in seconds
       direction: 'right',
       squares: [
         { x: 0 , y : 0 },
