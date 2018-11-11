@@ -15,6 +15,7 @@ const Area = styled.div`
   height: ${areaParams.height}px;
   position: relative;
   box-shadow: 0 11px 70px rgba(0,0,0,0.515);
+  margin: 0 auto;
   
   ${ props => ! props.isPlaying ? `
     display: flex;
@@ -28,13 +29,6 @@ const GameTitle = styled.h1`
   margin: 0;
 `;
 
-const RestartTitle = styled.p`
-  font-family: 'Joystix';
-  margin: 10px 0 0;
-  text-align: center;
-  cursor: pointer;
-`;
-
 class PlayingArea extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +36,7 @@ class PlayingArea extends Component {
     this.state = {
       isPlaying: false,
       isGameOver: false,
+      isFullScreen: false,
     };
 
     this.startGame = this.startGame.bind(this);

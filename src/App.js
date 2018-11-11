@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Fullscreen from "react-full-screen";
 import PlayingArea from './components/PlayingArea'
+import Button from './components/Button'
 
 const GameWrap = styled.div`;
   height: inherit;
@@ -33,16 +35,37 @@ const ScoreRight = styled(Score)`
 `;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isFullScreen: false,
+    };
+
+    this.toggleFullScreen = this.toggleFullScreen.bind(this);
+  }
+
+  toggleFullScreen() {
+    this.setState({ isFullScreen: ! this.state.isFullScreen });
+  }
+
   render() {
     return (
       <GameWrap>
         <div>
-          <Scores>
-            <ScoreLeft>15</ScoreLeft>
-            <ScoreRight>10</ScoreRight>
-          </Scores>
+          <Button onClick={this.toggleFullScreen} text="Fullscreen" type="fullscreen" />
 
-          <PlayingArea/>
+          <Fullscreen
+            enabled={this.state.isFullScreen}
+            onChange={isFullScreen => this.setState({isFullScreen})}
+          >
+            <Scores>
+              <ScoreLeft>15</ScoreLeft>
+              <ScoreRight>10</ScoreRight>
+            </Scores>
+
+            <PlayingArea/>
+          </Fullscreen>
         </div>
       </GameWrap>
     )

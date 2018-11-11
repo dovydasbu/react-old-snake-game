@@ -11,7 +11,8 @@ body {
     color: #24252a;
 }
 
-#game {
+#game,
+.fullscreen {
     height: inherit;
     background: #00e640;
 }

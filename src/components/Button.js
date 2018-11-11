@@ -8,11 +8,17 @@ const Btn = styled.button`
   max-width: auto;
   padding: 7px 13px;
   display: table;
-  margin: 20px auto 0;
+  margin: ${props => props.type === 'fullscreen' ? '0 auto' : '20px auto 0'};
   border-radius: 5px;
   background: #00e640;
   cursor: pointer;
   color: #24252a;
+  
+  ${props => props.type === 'fullscreen' ? `
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  ` : ''}
   
   &:hover {
     color: #00e640;
