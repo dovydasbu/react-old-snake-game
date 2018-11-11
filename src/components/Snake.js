@@ -1,5 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import styled from "styled-components";
+import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import { areaParams } from './PlayingArea'
 
 const Square = styled.div`
@@ -27,23 +28,26 @@ const Square = styled.div`
   `: '' }
 `;
 
-const squareWidth = 20;
+const squareSize = 20;
 
-export default class Snake extends Component {
+class Snake extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      speed: 0.1, // in seconds
-      direction: 'right',
+      speed: 0.2, // in seconds
       squares: [
-        { x: 0 , y : 0 },
-        { x: 20, y : 0 },
-        { x: 40, y : 0, head: true },
+        { x: 0 , y : 0, direction: 'right' },
+        { x: 20, y : 0, direction: 'right' },
+        { x: 40, y : 0, direction: 'right', head: true },
       ]
     };
 
     this.moveSnake = this.moveSnake.bind(this);
+    this.directionToUp = this.directionToUp.bind(this);
+    this.directionToRight = this.directionToRight.bind(this);
+    this.directionToDown = this.directionToDown.bind(this);
+    this.directionToLeft = this.directionToLeft.bind(this);
   }
 
   componentDidMount() {
@@ -55,17 +59,36 @@ export default class Snake extends Component {
   }
 
   moveSnake() {
-    let { squares, direction } = this.state;
+    let { squares } = this.state;
 
-    squares.map( square => {
-      switch (direction) {
+    squares.map( (square, index) => {
+      switch (square.direction) {
+        case 'up':
+          square.y -= squareSize;
+          break;
+
         case 'right':
-          square.x += squareWidth;
+          square.x += squareSize;
+          break;
+
+        case 'down':
+          square.y += squareSize;
+          break;
+
+        case 'left':
+          square.x -= squareSize;
           break;
 
         default:
           return null;
       }
+
+      const hasToChangeDirection = squares[index + 1] !== undefined && squares[index + 1].direction !== square.direction;
+      if (hasToChangeDirection) {
+        square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
+      }
+
+      square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
 
       return null;
     });
@@ -76,14 +99,14 @@ export default class Snake extends Component {
   }
 
   async isOutOfBounds() {
-    let { squares, direction } = this.state;
+    let { squares } = this.state;
 
     const head = squares.find( square => square.head === true);
     if (
-      (head.x <= 0 && direction === 'left') ||
-      (head.x >= areaParams.width && direction === 'right') ||
-      (head.y <= 0 && direction === 'up') ||
-      (head.y >= areaParams.height && direction === 'bottom')
+      (head.x === squareSize * -1 && head.direction === 'left') ||
+      (head.x >= areaParams.width && head.direction === 'right') ||
+      (head.y === squareSize * -1 && head.direction === 'up') ||
+      (head.y >= areaParams.height && head.direction === 'down')
     ) {
       return false;
     }
@@ -91,15 +114,54 @@ export default class Snake extends Component {
     return true;
   }
 
+  directionToUp(e) {
+    e.preventDefault();
+    this.setHeadDirection('up');
+  };
+
+  directionToRight(e) {
+    e.preventDefault();
+    this.setHeadDirection('right');
+  };
+
+  directionToDown(e) {
+    e.preventDefault();
+    this.setHeadDirection('down');
+  };
+
+  directionToLeft(e) {
+    e.preventDefault();
+    this.setHeadDirection('left');
+  };
+  
+  setHeadDirection(direction) {
+    let squares = this.state.squares;
+
+    squares.map( square => {
+      if (square.head !== undefined && square.head) {
+        square.direction = direction;
+      }
+    });
+
+    this.setState({ squares: squares });
+  }
+
   render() {
     const { squares } = this.state;
 
     return (
       <Fragment>
-        {squares !== undefined && squares.length > 0 && squares.map( (square, index) => (
-          <Square key={index} {...square} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowUp" onKeyHandle={this.directionToUp} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowRight" onKeyHandle={this.directionToRight} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowDown" onKeyHandle={this.directionToDown} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowLeft" onKeyHandle={this.directionToLeft} />
+
+        {squares !== undefined && squares.length > 0 && squares.map( (square, key) => (
+          <Square key={key} {...square} />
         ))}
       </Fragment>
     )
   }
 }
+
+export default Snake
