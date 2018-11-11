@@ -1,12 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import playImg from '../assets/images/play.png';
+import Snake from './Snake'
+
+export const areaParams = {
+  width: 800,
+  height: 500
+};
 
 const Area = styled.div`
   border: 6px solid #24252a;
-  width: 800px;
-  height: 500px;
+  width: ${areaParams.width}px;
+  height: ${areaParams.height}px;
   position: relative;
+  box-shadow: 0 11px 70px rgba(0, 0, 0, 0.15);
   
   ${ props => ! props.isPlaying ? `
     display: flex;
@@ -23,30 +30,66 @@ const PlayButton = styled.div`
   cursor: pointer;
 `;
 
+const GameOver = styled.div``;
+
+const GameOverTitle = styled.h1`
+  font-family: 'Joystix';
+  margin: 0;
+`;
+
+const RestartTitle = styled.p`
+  font-family: 'Joystix';
+  margin: 10px 0 0;
+  text-align: center;
+  cursor: pointer;
+`;
+
 class PlayingArea extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isPlaying: false
+      isPlaying: false,
+      isGameOver: false,
     };
 
-    this.startPlay = this.startPlay.bind(this)
+    this.startGame = this.startGame.bind(this);
+    this.gameOver = this.gameOver.bind(this);
+    this.restart = this.restart.bind(this);
   }
 
-  startPlay() {
+  startGame() {
     this.setState({ isPlaying: true });
   }
 
+  gameOver() {
+    this.setState({ isPlaying: false, isGameOver: true });
+  }
+
+  restart() {
+    this.setState({ isPlaying: true, isGameOver: false });
+  }
+
   render() {
-    const { isPlaying } = this.state;
+    const { isPlaying, isGameOver } = this.state;
 
     return (
       <Area>
-        {isPlaying ? (
-          <h1>let's play</h1>
-        ) : (
-          <PlayButton onClick={this.startPlay} />
+        {isPlaying && (
+          <Fragment>
+            <Snake onGameOver={this.gameOver} />
+          </Fragment>
+        )}
+
+        {isGameOver && (
+          <GameOver>
+            <GameOverTitle>Game  over</GameOverTitle>
+            <RestartTitle onClick={this.restart}>restart</RestartTitle>
+          </GameOver>
+        )}
+
+        { ! isPlaying && ! isGameOver && (
+          <PlayButton onClick={this.startGame} />
         )}
       </Area>
     )
