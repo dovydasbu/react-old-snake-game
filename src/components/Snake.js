@@ -40,7 +40,8 @@ class Snake extends Component {
         { x: 0 , y : 0, direction: 'right' },
         { x: 20, y : 0, direction: 'right' },
         { x: 40, y : 0, direction: 'right', head: true },
-      ]
+      ],
+      keyStack: []
     };
 
     this.moveSnake = this.moveSnake.bind(this);
@@ -59,7 +60,7 @@ class Snake extends Component {
   }
 
   moveSnake() {
-    let { squares } = this.state;
+    let { squares, keyStack } = this.state;
 
     squares.map( (square, index) => {
       switch (square.direction) {
@@ -83,18 +84,35 @@ class Snake extends Component {
           return null;
       }
 
-      const hasToChangeDirection = squares[index + 1] !== undefined && squares[index + 1].direction !== square.direction;
-      if (hasToChangeDirection) {
+      // Set head direction
+      if (square.head !== undefined && square.head && keyStack.length > 0)  {
+        // do not let change direction to opposite side
+        if (
+          (square.direction === 'up' && keyStack[0] !== 'down') ||
+          (square.direction === 'right' && keyStack[0] !== 'left') ||
+          (square.direction === 'down' && keyStack[0] !== 'up') ||
+          (square.direction === 'left' && keyStack[0] !== 'right'))
+        {
+          square.direction = keyStack[0];
+        }
+
+        // Delete most old key press
+        keyStack.shift();
+      } else {
+        // Set normal square direction
+        const hasToChangeDirection = squares[index + 1] !== undefined && squares[index + 1].direction !== square.direction;
+        if (hasToChangeDirection) {
+          square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
+        }
+
         square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
       }
-
-      square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
 
       return null;
     });
 
     this.isOutOfBounds().then(resp => {
-      resp ? this.setState({ squares: squares }) : this.props.onGameOver();
+      resp ? this.setState({ squares: squares, keyStack: keyStack }) : this.props.onGameOver();
     });
   }
 
@@ -135,15 +153,19 @@ class Snake extends Component {
   };
   
   setHeadDirection(direction) {
-    let squares = this.state.squares;
+    let { squares, keyStack } = this.state;
 
     squares.map( square => {
-      if (square.head !== undefined && square.head) {
-        square.direction = direction;
+      // if head and not oposite direction is clicked
+      if (square.head !== undefined && square.head && keyStack[keyStack.length - 1] !== direction)
+      {
+        keyStack.push(direction);
       }
+
+      return null;
     });
 
-    this.setState({ squares: squares });
+    this.setState({ keyStack: keyStack });
   }
 
   render() {
