@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
-import Snake, { squareSize } from './Snake'
+import Snake from './Snake'
 import Button from './Button'
 import Food from "./Food"
+import { getRandomWidth, getRandomHeight } from '../Random'
 
 export const areaParams = {
   width: 800,
@@ -98,15 +99,3 @@ class PlayingArea extends Component {
 }
 
 export default PlayingArea
-
-function getRandomWidth() {
-  return getRandomInt(1, (areaParams.width / squareSize) - 1) * 20;
-}
-
-function getRandomHeight() {
-  return getRandomInt(1, (areaParams.height / squareSize) - 1) * 20;
-}
-
-function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
