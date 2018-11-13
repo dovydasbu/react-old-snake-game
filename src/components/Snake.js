@@ -3,14 +3,16 @@ import styled from "styled-components";
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import { areaParams } from './PlayingArea'
 
-const Square = styled.div`
+const Square = styled.div.attrs({
+  style: ({ x, y }) => ({
+    left: x, top: y
+  }),
+})`
   width: 18px;
   height: 18px;
   border: 1px solid #00e640;
   background: #24252a;
   position: absolute;
-  left: ${props => props.x}px;
-  top: ${props => props.y}px;
   
   ${props => props.head ? `
     &::before {
@@ -22,13 +24,13 @@ const Square = styled.div`
       border-radius: 180px;
       left: 50%;
       top: 50%;
-      background-color: red;
+      background-color: #f44336;
       transform: translate(-50%, -50%);
     }
   `: '' }
 `;
 
-const squareSize = 20;
+export const squareSize = 20;
 
 class Snake extends Component {
   constructor(props) {
@@ -61,67 +63,93 @@ class Snake extends Component {
 
   moveSnake() {
     let { squares, keyStack } = this.state;
+    let { onFoodEaten, foodPosition } = this.props;
+
 
     squares.map( (square, index) => {
-      switch (square.direction) {
-        case 'up':
-          square.y -= squareSize;
-          break;
+      // Move current square
+      square = this.moveSquare(square);
 
-        case 'right':
-          square.x += squareSize;
-          break;
-
-        case 'down':
-          square.y += squareSize;
-          break;
-
-        case 'left':
-          square.x -= squareSize;
-          break;
-
-        default:
-          return null;
+      if( square.head !== undefined && square.head && ! this.isOutOfBounds(squares)) {
+        this.props.onGameOver();
       }
 
-      // Set head direction
-      if (square.head !== undefined && square.head && keyStack.length > 0)  {
-        // do not let change direction to opposite side
-        if (
-          (square.direction === 'up' && keyStack[0] !== 'down') ||
-          (square.direction === 'right' && keyStack[0] !== 'left') ||
-          (square.direction === 'down' && keyStack[0] !== 'up') ||
-          (square.direction === 'left' && keyStack[0] !== 'right'))
-        {
-          square.direction = keyStack[0];
-        }
+      // Set square direction
+      square = this.changeSquareDirection(squares, square, index);
 
-        // Delete most old key press
-        keyStack.shift();
-      } else {
-        // Set normal square direction
-        const hasToChangeDirection = squares[index + 1] !== undefined && squares[index + 1].direction !== square.direction;
-        if (hasToChangeDirection) {
-          square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
-        }
+      // Check if head has reached a food
+      if(
+        square.head !== undefined && square.head &&
+        square.x === foodPosition.x && square.y === foodPosition.y
+      ) {
+        onFoodEaten();
+      }
 
+      return square;
+    });
+
+    this.isOutOfBounds(squares) ? this.setState({ squares: squares, keyStack: keyStack }) : this.props.onGameOver();
+  }
+
+  moveSquare(square) {
+    switch (square.direction) {
+      case 'up':
+        square.y -= squareSize;
+        break;
+
+      case 'right':
+        square.x += squareSize;
+        break;
+
+      case 'down':
+        square.y += squareSize;
+        break;
+
+      case 'left':
+        square.x -= squareSize;
+        break;
+
+      default:
+        return null;
+    }
+
+    return square;
+  }
+
+  changeSquareDirection(squares, square, index) {
+    const { keyStack } = this.state;
+
+    if (square.head !== undefined && square.head && keyStack.length > 0)  {
+      // do not let change direction to opposite side
+      if (
+        (square.direction === 'up' && keyStack[0] !== 'down') ||
+        (square.direction === 'right' && keyStack[0] !== 'left') ||
+        (square.direction === 'down' && keyStack[0] !== 'up') ||
+        (square.direction === 'left' && keyStack[0] !== 'right'))
+      {
+        square.direction = keyStack[0];
+      }
+
+      // Delete most old key press
+      keyStack.shift();
+    } else {
+      // Set normal square direction
+      const hasToChangeDirection = squares[index + 1] !== undefined && squares[index + 1].direction !== square.direction;
+      if (hasToChangeDirection) {
         square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
       }
 
-      return null;
-    });
+      square.direction = squares[index + 1] !== undefined ? squares[index + 1].direction : square.direction;
+    }
 
-    this.isOutOfBounds().then(resp => {
-      resp ? this.setState({ squares: squares, keyStack: keyStack }) : this.props.onGameOver();
-    });
+    return square;
   }
 
-  async isOutOfBounds() {
-    let { squares } = this.state;
-
+  isOutOfBounds(squares) {
     const head = squares.find( square => square.head === true);
+
     if (
-      (head.x === squareSize * -1 && head.direction === 'left') ||
+      (head.x < 0 && head.direction === 'left') ||
       (head.x >= areaParams.width && head.direction === 'right') ||
       (head.y === squareSize * -1 && head.direction === 'up') ||
       (head.y >= areaParams.height && head.direction === 'down')
