@@ -51,6 +51,7 @@ class Snake extends Component {
     this.directionToRight = this.directionToRight.bind(this);
     this.directionToDown = this.directionToDown.bind(this);
     this.directionToLeft = this.directionToLeft.bind(this);
+    this.foodEaten = this.foodEaten.bind(this);
   }
 
   componentDidMount() {
@@ -61,10 +62,46 @@ class Snake extends Component {
     clearInterval(this.movingInterval);
   }
 
+  foodEaten() {
+    const { squares } = this.state;
+    const { onFoodEaten } = this.props;
+
+    // Change food position
+    onFoodEaten(squares);
+
+    // Add square to snake
+    if (squares !== undefined && squares.length > 0) {
+      const { x, y, direction } = squares[0];
+      let newX = x;
+      let newY = y;
+
+      switch (direction) {
+        case 'up':
+          newY += squareSize;
+          break;
+
+        case 'right':
+          newX -= squareSize;
+          break;
+
+        case 'down':
+          newY -= squareSize;
+          break;
+
+        case 'left':
+          newX += squareSize;
+          break;
+      }
+
+      squares.unshift({ x: newX, y: newY, direction: direction });
+
+      this.setState({ squares: squares });
+    }
+  }
+
   moveSnake() {
     let { squares, keyStack } = this.state;
-    let { onFoodEaten, foodPosition } = this.props;
-
+    let { foodPosition } = this.props;
 
     squares.map( (square, index) => {
       // Move current square
@@ -82,7 +119,7 @@ class Snake extends Component {
         square.head !== undefined && square.head &&
         square.x === foodPosition.x && square.y === foodPosition.y
       ) {
-        onFoodEaten();
+        this.foodEaten();
       }
 
       return square;
