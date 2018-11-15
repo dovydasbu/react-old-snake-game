@@ -32,17 +32,19 @@ const Square = styled.div.attrs({
 
 export const squareSize = 20;
 
+export const defaultSquares = [
+  { x: 0 , y : 0, direction: 'right' },
+  { x: 20, y : 0, direction: 'right' },
+  { x: 40, y : 0, direction: 'right', head: true },
+];
+
 class Snake extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       speed: 0.2, // in seconds
-      squares: [
-        { x: 0 , y : 0, direction: 'right' },
-        { x: 20, y : 0, direction: 'right' },
-        { x: 40, y : 0, direction: 'right', head: true },
-      ],
+      squares: defaultSquares,
       keyStack: []
     };
 

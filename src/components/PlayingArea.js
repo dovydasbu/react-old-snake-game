@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
-import Snake from './Snake'
+import Snake, { defaultSquares } from './Snake'
 import Button from './Button'
 import Food from "./Food"
 import { getRandomWidth, getRandomHeight } from '../Random'
@@ -39,7 +39,7 @@ class PlayingArea extends Component {
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
-      foodPosition: { x: getRandomWidth(), y: getRandomHeight() }
+      foodPosition: this.getFoodCoords(defaultSquares)
     };
 
     this.startGame = this.startGame.bind(this);
@@ -60,8 +60,26 @@ class PlayingArea extends Component {
     this.setState({ isPlaying: true, isGameOver: false });
   }
 
-  eatFood() {
-    this.setState({ foodPosition: { x: getRandomWidth(), y: getRandomHeight()}});
+  eatFood(squares) {
+    const coords = this.getFoodCoords(squares);
+
+    this.setState({ foodPosition: Object.assign({}, coords) });
+  }
+
+  getFoodCoords(squares) {
+    let coords = { x: getRandomWidth(), y: getRandomHeight() };
+
+    let resp = true;
+    do {
+      resp = squares.find(square => {
+        return square.x === coords.x && square.y === coords.y;
+      });
+
+      coords.x = getRandomWidth();
+      coords.y = getRandomHeight();
+    } while (resp);
+
+    return coords;
   }
 
   render() {
