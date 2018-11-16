@@ -57,7 +57,14 @@ class Snake extends Component {
   }
 
   componentDidMount() {
-    this.movingInterval = setInterval(() => this.moveSnake(), this.state.speed * 1000);
+    // Start moving the snake
+    this.moveSnake();
+  }
+
+  componentDidUpdate() {
+    clearInterval(this.movingInterval);
+    console.log(this.state.speed);
+    this.movingInterval = setInterval( () => this.moveSnake(), this.state.speed * 1000);
   }
 
   componentWillUnmount() {
@@ -65,8 +72,8 @@ class Snake extends Component {
   }
 
   foodEaten() {
-    const { squares } = this.state;
     const { onFoodEaten } = this.props;
+    let { squares, speed } = this.state;
 
     // Change food position
     onFoodEaten(squares);
@@ -96,9 +103,12 @@ class Snake extends Component {
       }
 
       squares.unshift({ x: newX, y: newY, direction: direction });
-
-      this.setState({ squares: squares });
     }
+
+    // Increase speed of snake
+    speed *= 0.9;
+
+    this.setState({ squares: squares, speed: speed });
   }
 
   moveSnake() {
