@@ -39,25 +39,21 @@ class PlayingArea extends Component {
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
-      foodPosition: this.getFoodCoords(defaultSquares)
+      isRestart: false,
+      foodPosition: this.getFoodCoords(defaultSquares())
     };
 
     this.startGame = this.startGame.bind(this);
     this.gameOver = this.gameOver.bind(this);
-    this.restart = this.restart.bind(this);
     this.eatFood = this.eatFood.bind(this);
   }
 
   startGame() {
-    this.setState({ isPlaying: true, isGameOver: false });
+    this.setState({ isPlaying: true, isGameOver: false, isRestart: false });
   }
 
   gameOver() {
-    this.setState({ isPlaying: false, isGameOver: true });
-  }
-
-  restart() {
-    this.setState({ isPlaying: true, isGameOver: false });
+    this.setState({ isPlaying: false, isGameOver: true, isRestart: false });
   }
 
   eatFood(squares) {
@@ -101,7 +97,7 @@ class PlayingArea extends Component {
         {isGameOver && (
           <div>
             <GameTitle>Game  over</GameTitle>
-            <Button onClick={this.restart} text="restart" />
+            <Button onClick={this.startGame} text="restart" />
           </div>
         )}
 
