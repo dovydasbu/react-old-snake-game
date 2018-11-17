@@ -1,5 +1,5 @@
-import {areaParams} from "./components/PlayingArea";
-import {squareSize} from "./components/Snake";
+import { areaParams } from "./components/PlayingArea";
+import { squareSize } from "./components/Snake";
 
 export function getRandomWidth() {
   return getRandomInt(1, (areaParams.width / squareSize) - 1) * 20;
