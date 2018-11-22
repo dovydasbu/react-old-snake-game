@@ -134,14 +134,14 @@ class Snake extends Component {
     let { squares, keyStack } = this.state;
     let { foodPosition, onGameOver } = this.props;
 
-    squares.map( (square, index) => {
-      // Move current square
-      square = this.moveSquare(square);
+    // Check if head has hit another square or went out of playing area
+    if ( this.hasSnakeAteItselft(squares) || this.isOutOfBounds(squares)) {
+      onGameOver();
+    } else {
+      squares.map( (square, index) => {
+        // Move current square
+        square = this.moveSquare(square);
 
-      // After head square movement check if it is not out of bounds
-      if ( square.head !== undefined && square.head && this.isOutOfBounds(squares)) {
-        onGameOver()
-      } else {
         // Set square direction
         square = this.changeSquareDirection(squares, square, index);
 
@@ -149,13 +149,11 @@ class Snake extends Component {
         if ( square.head !== undefined && square.head && square.x === foodPosition.x && square.y === foodPosition.y ) {
           this.foodEaten();
         }
-      }
 
-      return square;
-    });
+        return square;
+      });
 
-    if ( ! this.isOutOfBounds(squares)) {
-      this.setState({ squares: squares, keyStack: keyStack })
+      this.setState({ squares: squares, keyStack: keyStack });
     }
   }
 
@@ -217,15 +215,47 @@ class Snake extends Component {
     const head = squares.find( square => square.head === true);
 
     if (
-      (head.x < 0 && head.direction === 'left') ||
-      (head.x >= areaParams.width && head.direction === 'right') ||
-      (head.y === squareSize * -1 && head.direction === 'up') ||
-      (head.y >= areaParams.height && head.direction === 'down')
+      (head.x <= 0 && head.direction === 'left') ||
+      (head.x >= areaParams.width - squareSize && head.direction === 'right') ||
+      (head.y <= 0 && head.direction === 'up') ||
+      (head.y >= areaParams.height - squareSize && head.direction === 'down')
     ) {
       return true;
     }
 
     return false;
+  }
+
+  hasSnakeAteItselft(squares) {
+    const head = squares.find( square => square.head === true);
+    let coords = { x: head.x, y: head.y };
+    let pass = true;
+
+    switch (head.direction) {
+      case 'up':
+        coords.y -= squareSize;
+        break;
+
+      case 'right':
+        coords.x += squareSize;
+        break;
+
+      case 'down':
+        coords.y += squareSize;
+        break;
+
+      case 'left':
+        coords.x -= squareSize;
+        break;
+
+      default:
+        pass = false;
+        break;
+    }
+
+    return pass ? squares.find(square => {
+      return square.x === coords.x && square.y === coords.y;
+    }) : undefined;
   }
 
   directionToUp(e) {
