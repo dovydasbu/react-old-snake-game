@@ -34,28 +34,35 @@ class PlayingArea extends Component {
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
+      isPause: false,
       foodPosition: this.getFoodCoords(defaultSquares())
     };
 
     this.startGame = this.startGame.bind(this);
+    this.pauseGame = this.pauseGame.bind(this);
     this.gameOver = this.gameOver.bind(this);
     this.eatFood = this.eatFood.bind(this);
   }
 
   startGame() {
-    this.setState({ isPlaying: true, isGameOver: false });
+    this.setState({ isPlaying: true, isGameOver: false, isPause: false });
+  }
+
+  pauseGame() {
+    this.setState( prev => ({
+        isPause: prev.isPlaying && ! prev.isGameOver ? ! prev.isPause : prev.isPause
+    }));
   }
 
   gameOver(squares) {
     const coords = this.getFoodCoords(squares);
 
-    this.setState( previousState => {
-      return {
-        isPlaying: false,
-        isGameOver: true,
-        foodPosition: squares !== undefined ? coords : previousState.foodPosition
-      }
-    });
+    this.setState( prev => ({
+      isPlaying: false,
+      isGameOver: true,
+      isPause: false,
+      foodPosition: squares !== undefined ? coords : prev.foodPosition
+    }));
   }
 
   eatFood(squares) {

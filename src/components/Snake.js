@@ -132,12 +132,12 @@ class Snake extends Component {
 
   moveSnake() {
     let { squares, keyStack } = this.state;
-    let { foodPosition, onGameOver } = this.props;
+    let { foodPosition, onGameOver, isPause } = this.props;
 
     // Check if head has hit another square or went out of playing area
     if ( this.hasSnakeAteItselft(squares) || this.isOutOfBounds(squares)) {
       onGameOver(squares);
-    } else {
+    } else if ( ! isPause ) {
       squares.map( (square, index) => {
         // Move current square
         square = this.moveSquare(square);
