@@ -39,7 +39,6 @@ class PlayingArea extends Component {
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
-      isRestart: false,
       foodPosition: this.getFoodCoords(defaultSquares())
     };
 
@@ -49,7 +48,7 @@ class PlayingArea extends Component {
   }
 
   startGame() {
-    this.setState({ isPlaying: true, isGameOver: false, isRestart: false });
+    this.setState({ isPlaying: true, isGameOver: false });
   }
 
   gameOver(squares) {
@@ -59,7 +58,6 @@ class PlayingArea extends Component {
       return {
         isPlaying: false,
         isGameOver: true,
-        isRestart: false,
         foodPosition: squares !== undefined ? coords : previousState.foodPosition
       }
     });
