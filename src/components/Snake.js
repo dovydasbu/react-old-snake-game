@@ -136,7 +136,7 @@ class Snake extends Component {
 
     // Check if head has hit another square or went out of playing area
     if ( this.hasSnakeAteItselft(squares) || this.isOutOfBounds(squares)) {
-      onGameOver();
+      onGameOver(squares);
     } else {
       squares.map( (square, index) => {
         // Move current square

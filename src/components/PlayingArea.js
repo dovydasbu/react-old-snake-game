@@ -52,8 +52,17 @@ class PlayingArea extends Component {
     this.setState({ isPlaying: true, isGameOver: false, isRestart: false });
   }
 
-  gameOver() {
-    this.setState({ isPlaying: false, isGameOver: true, isRestart: false });
+  gameOver(squares) {
+    const coords = this.getFoodCoords(squares);
+
+    this.setState( previousState => {
+      return {
+        isPlaying: false,
+        isGameOver: true,
+        isRestart: false,
+        foodPosition: squares !== undefined ? coords : previousState.foodPosition
+      }
+    });
   }
 
   eatFood(squares) {
