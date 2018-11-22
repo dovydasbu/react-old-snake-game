@@ -63,19 +63,22 @@ class PlayingArea extends Component {
   }
 
   getFoodCoords(squares) {
-    let coords = { x: getRandomWidth(), y: getRandomHeight() };
-
     let resp = true;
-    do {
-      resp = squares.find(square => {
-        return square.x === coords.x && square.y === coords.y;
-      });
+    let coords = { x: 0, y: 0 };
 
-      coords.x = getRandomWidth();
-      coords.y = getRandomHeight();
-    } while (resp);
+    do {
+      coords = { x: getRandomWidth(), y: getRandomHeight() };
+
+      resp = this.getSquareByCoords(squares, coords);
+    } while (resp !== undefined);
 
     return coords;
+  }
+
+  getSquareByCoords(squares, coords) {
+    return squares.find(square => {
+      return square.x === coords.x && square.y === coords.y;
+    });
   }
 
   render() {
