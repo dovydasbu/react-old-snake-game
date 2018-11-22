@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
 import Snake, { defaultSquares } from './Snake'
-import Button from './Button'
 import Food from "./Food"
+import GameMessage from './GameMessage'
 import { getRandomWidth, getRandomHeight } from '../Random'
 
 export const areaParams = {
@@ -24,11 +24,6 @@ const Area = styled.div`
     justify-content: center;
     align-items: center;
   `: ''}
-`;
-
-const GameTitle = styled.h1`
-  font-family: 'Joystix';
-  margin: 0;
 `;
 
 class PlayingArea extends Component {
@@ -89,33 +84,33 @@ class PlayingArea extends Component {
   }
 
   render() {
-    const { isPlaying, isGameOver, foodPosition } = this.state;
+    const { isPlaying, isGameOver, isPause, foodPosition } = this.state;
 
     return (
       <Area>
         <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
         <KeyHandler keyEventName={KEYPRESS} keyValue="Spacebar" onKeyHandle={this.startGame} />
         <KeyHandler keyEventName={KEYPRESS} keyValue=" " onKeyHandle={this.startGame} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="p" onKeyHandle={this.pauseGame} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="P" onKeyHandle={this.pauseGame} />
 
         {isPlaying && (
           <Fragment>
+            {isPause && (
+              <GameMessage title="pause" btnClick={this.pauseGame} btnText="resume" />
+            )}
+
             <Food {...foodPosition} />
-            <Snake onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
+            <Snake isPause={isPause} onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
           </Fragment>
         )}
 
         {isGameOver && (
-          <div>
-            <GameTitle>Game  over</GameTitle>
-            <Button onClick={this.startGame} text="restart" />
-          </div>
+          <GameMessage title="Game over" btnClick={this.startGame} btnText="restart" />
         )}
 
         { ! isPlaying && ! isGameOver && (
-          <div>
-            <GameTitle>Snake game</GameTitle>
-            <Button onClick={this.startGame} text="Play" />
-          </div>
+          <GameMessage title="Snake game" btnClick={this.startGame} btnText="play" />
         )}
       </Area>
     )
