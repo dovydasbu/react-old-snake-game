@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
-import Snake, { defaultSquares } from './Snake'
-import Food from "./Food"
-import GameMessage from './GameMessage'
 import { getRandomWidth, getRandomHeight } from '../Random'
+import Snake, { defaultSquares } from './Snake'
+import Food from './Food'
+import Scores from './Scores'
+import GameMessage from './GameMessage'
 
 export const areaParams = {
   width: 800,
@@ -31,6 +32,7 @@ class PlayingArea extends Component {
     super(props);
 
     this.state = {
+      score: 0,
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
@@ -68,7 +70,7 @@ class PlayingArea extends Component {
   eatFood(squares) {
     const coords = this.getFoodCoords(squares);
 
-    this.setState({ foodPosition: Object.assign({}, coords) });
+    this.setState(previous => ({ foodPosition: Object.assign({}, coords), score: previous.score + 5 }));
   }
 
   getFoodCoords(squares) {
@@ -91,35 +93,39 @@ class PlayingArea extends Component {
   }
 
   render() {
-    const { isPlaying, isGameOver, isPause, foodPosition } = this.state;
+    const { score, isPlaying, isGameOver, isPause, foodPosition } = this.state;
 
     return (
-      <Area>
-        <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="Spacebar" onKeyHandle={this.startGame} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue=" " onKeyHandle={this.startGame} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="p" onKeyHandle={this.pauseGame} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="P" onKeyHandle={this.pauseGame} />
+      <Fragment>
+        <Scores score={score} />
 
-        {isPlaying && (
-          <Fragment>
-            {isPause && (
-              <GameMessage title="pause" btnClick={this.pauseGame} btnText="resume" />
-            )}
+        <Area>
+          <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
+          <KeyHandler keyEventName={KEYPRESS} keyValue="Spacebar" onKeyHandle={this.startGame} />
+          <KeyHandler keyEventName={KEYPRESS} keyValue=" " onKeyHandle={this.startGame} />
+          <KeyHandler keyEventName={KEYPRESS} keyValue="p" onKeyHandle={this.pauseGame} />
+          <KeyHandler keyEventName={KEYPRESS} keyValue="P" onKeyHandle={this.pauseGame} />
 
-            <Food {...foodPosition} />
-            <Snake isPause={isPause} onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
-          </Fragment>
-        )}
+          {isPlaying && (
+            <Fragment>
+              {isPause && (
+                <GameMessage title="pause" btnClick={this.pauseGame} btnText="resume" />
+              )}
 
-        {isGameOver && (
-          <GameMessage title="Game over" btnClick={this.startGame} btnText="restart" />
-        )}
+              <Food {...foodPosition} />
+              <Snake isPause={isPause} onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
+            </Fragment>
+          )}
 
-        { ! isPlaying && ! isGameOver && (
-          <GameMessage title="Snake game" btnClick={this.startGame} btnText="play" />
-        )}
-      </Area>
+          {isGameOver && (
+            <GameMessage title="Game over" btnClick={this.startGame} btnText="restart" />
+          )}
+
+          { ! isPlaying && ! isGameOver && (
+            <GameMessage title="Snake game" btnClick={this.startGame} btnText="play" />
+          )}
+        </Area>
+      </Fragment>
     )
   }
 }

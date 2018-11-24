@@ -46,7 +46,7 @@ class Snake extends Component {
 
     this.state = {
       foodCounter: foodAmount(),
-      speed: 0.2, // in seconds
+      speed: 0.17, // in seconds
       squares: defaultSquares(),
       keyStack: []
     };
