@@ -13,20 +13,22 @@ const Score = styled.div`
   font-size: 40px;
   font-weight: 900;
   margin-bottom: 10px;
+  padding-right: 15px;
+  
+  ${props => props.isBlinking ? `
+    animation: blinker 0.3333333s linear infinite;
+  ` : ''}
 `;
 
-const ScoreLeft = styled(Score)`
+const TimeLeft = styled(Score)`
+  padding-right: 0px;
   padding-left: 15px;
 `;
 
-const ScoreRight = styled(Score)`
-  padding-right: 15px;
-`;
-
-export const Scores = ({ timeLeft, score }) => (
+export const Scores = ({ timeLeft, score, isTimeBlinking, isScoreBlinking }) => (
   <ScoresWrap>
-    <ScoreLeft>{ timeLeft }</ScoreLeft>
-    <ScoreRight>{ score }</ScoreRight>
+    <TimeLeft isBlinking={isTimeBlinking}>{ timeLeft }</TimeLeft>
+    <Score isBlinking={isScoreBlinking}>{ score }</Score>
   </ScoresWrap>
 );
 

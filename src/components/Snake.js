@@ -38,15 +38,12 @@ export const defaultSquares = () => [
   { x: 40, y : 0, direction: 'right', head: true },
 ];
 
-const foodAmount = () => 3;
-
 class Snake extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      foodCounter: foodAmount(),
-      speed: 0.17, // in seconds
+      speed: this.props.speed, // in seconds
       squares: defaultSquares(),
       keyStack: []
     };
@@ -61,16 +58,21 @@ class Snake extends Component {
 
   componentDidMount() {
     // Start moving the snake
-    this.movingInterval = setInterval( () => this.moveSnake(), this.state.speed * 1000 );
+    this.setMovingInterval(this.state.speed);
   }
 
   componentWillUnmount() {
     clearInterval(this.movingInterval);
   }
 
+  setMovingInterval(speed) {
+    clearInterval(this.movingInterval);
+    this.movingInterval = setInterval( () => this.moveSnake(), speed * 1000 );
+  }
+
   foodEaten() {
     const { onFoodEaten } = this.props;
-    let { squares, speed, foodCounter } = this.state;
+    let { squares } = this.state;
 
     // Change food position
     onFoodEaten(squares);
@@ -105,39 +107,22 @@ class Snake extends Component {
       squares.unshift({ x: newX, y: newY, direction: direction });
     }
 
-    // Increase speed of snake
-    const intervals = {
-      0.8: 0.14,
-      0.85: 0.10,
-      0.9: 0.08,
-      0.95: 0.06,
-    };
-    let counter = 0.8;
-
-    Object.keys(intervals).forEach( key => {
-      if (speed < intervals[key]) {
-        counter = key;
-      }
-    });
-
-    if (--foodCounter === 0 && speed > 0.05) {
-      speed *= counter;
-      clearInterval(this.movingInterval);
-      this.movingInterval = setInterval( () => this.moveSnake(), speed * 1000 );
-      foodCounter = foodAmount();
-    }
-
-    this.setState({ squares: squares, speed: speed, foodCounter: foodCounter });
+    this.setState({ squares: squares });
   }
 
   moveSnake() {
     let { squares, keyStack } = this.state;
-    let { foodPosition, onGameOver, isPause } = this.props;
+    let { speed, foodPosition, onGameOver, isPause } = this.props;
 
     // Check if head has hit another square or went out of playing area
-    if ( this.hasSnakeAteItselft(squares) || this.isOutOfBounds(squares)) {
+    if ( this.hasAteItself(squares) || this.isOutOfBounds(squares)) {
       onGameOver(squares);
+
     } else if ( ! isPause ) {
+      if (this.state.speed !== speed) {
+        this.setMovingInterval(this.props.speed);
+      }
+
       squares.map( (square, index) => {
         // Move current square
         square = this.moveSquare(square);
@@ -153,7 +138,7 @@ class Snake extends Component {
         return square;
       });
 
-      this.setState({ squares: squares, keyStack: keyStack });
+      this.setState({ squares: squares, keyStack: keyStack, speed: speed });
     }
   }
 
@@ -226,7 +211,7 @@ class Snake extends Component {
     return false;
   }
 
-  hasSnakeAteItselft(squares) {
+  hasAteItself(squares) {
     const head = squares.find( square => square.head === true);
     let coords = { x: head.x, y: head.y };
     let pass = true;

@@ -16,3 +16,9 @@ body {
     height: inherit;
     background: #00e640;
 }
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}

@@ -27,27 +27,49 @@ const Area = styled.div`
   `: ''}
 `;
 
+// Time left before speed increase
+export const defaultTimeLeft = 15;
+export const defaultSnakeSpeed = 0.17;
+
 class PlayingArea extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      snakeSpeed: defaultSnakeSpeed,
+      timeLeft: defaultTimeLeft, // Time left before speed increase
       score: 0,
+      hasReachedMaxSpeed: false,
       isPlaying: false,
       isGameOver: false,
       isFullScreen: false,
       isPause: false,
+      isTimeBlinking: false,
+      isScoreBlinking: false,
       foodPosition: this.getFoodCoords(defaultSquares())
     };
 
     this.startGame = this.startGame.bind(this);
     this.pauseGame = this.pauseGame.bind(this);
     this.gameOver = this.gameOver.bind(this);
+    this.updateTimeLeft = this.updateTimeLeft.bind(this);
     this.eatFood = this.eatFood.bind(this);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timeLeftInterval);
+  }
+
   startGame() {
-    this.setState({ isPlaying: true, isGameOver: false, isPause: false });
+    this.initTimeInterval();
+
+    this.setState({
+      timeLeft: defaultTimeLeft,
+      snakeSpeed: defaultSnakeSpeed,
+      isPlaying: true,
+      isGameOver: false,
+      isPause: false
+    });
   }
 
   pauseGame() {
@@ -65,6 +87,47 @@ class PlayingArea extends Component {
       isPause: false,
       foodPosition: squares !== undefined ? coords : prev.foodPosition
     }));
+  }
+
+  initTimeInterval() {
+    this.timeLeftInterval = setInterval( () => this.updateTimeLeft(), 1000 );
+  }
+
+  updateTimeLeft() {
+    let { timeLeft, hasReachedMaxSpeed } = this.state;
+
+    if (timeLeft === 0 && ! hasReachedMaxSpeed) {
+      // Update time and increase speed
+      this.setState({ isTimeBlinking: true });
+
+      clearInterval(this.timeLeftInterval);
+      if ( ! hasReachedMaxSpeed) {
+        setTimeout(() => {
+          let snakeSpeed = this.state.snakeSpeed;
+          let timeLeft = defaultTimeLeft;
+
+          if (snakeSpeed >= 0.12) {
+            snakeSpeed -= 0.03
+          } else if ( snakeSpeed >= 0.06 ) {
+            snakeSpeed -= 0.01
+          } else {
+            hasReachedMaxSpeed = true;
+            timeLeft = 'MAX SPEED';
+          }
+
+          this.setState({
+            timeLeft: timeLeft,
+            hasReachedMaxSpeed: hasReachedMaxSpeed,
+            isTimeBlinking: false,
+            snakeSpeed: snakeSpeed
+          });
+          this.initTimeInterval();
+        }, 1000)
+      }
+
+    } else if ( ! hasReachedMaxSpeed) {
+      this.setState({ timeLeft: timeLeft - 1 });
+    }
   }
 
   eatFood(squares) {
@@ -92,12 +155,18 @@ class PlayingArea extends Component {
     });
   }
 
+  getTimeLeft() {
+    const seconds = this.state.timeLeft;
+
+    return `${seconds < 10 ? `0${seconds}` : seconds}`;
+  }
+
   render() {
-    const { score, isPlaying, isGameOver, isPause, foodPosition } = this.state;
+    const { score, snakeSpeed, isPlaying, isGameOver, isPause, isTimeBlinking, isScoreBlinking, foodPosition } = this.state;
 
     return (
       <Fragment>
-        <Scores score={score} />
+        <Scores score={score} timeLeft={this.getTimeLeft()} isTimeBlinking={isTimeBlinking} isScoreBlinking={isScoreBlinking} />
 
         <Area>
           <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
@@ -113,7 +182,7 @@ class PlayingArea extends Component {
               )}
 
               <Food {...foodPosition} />
-              <Snake isPause={isPause} onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
+              <Snake speed={snakeSpeed} isPause={isPause} onGameOver={this.gameOver} onFoodEaten={this.eatFood} foodPosition={foodPosition} />
             </Fragment>
           )}
 

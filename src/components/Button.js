@@ -26,7 +26,7 @@ const Btn = styled.button`
   }
 `;
 
-export const Button = ({ text, ...rest }) => (
+const Button = ({ text, ...rest }) => (
   <Btn {...rest}>{text}</Btn>
 );
 
