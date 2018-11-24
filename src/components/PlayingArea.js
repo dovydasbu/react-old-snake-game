@@ -61,9 +61,11 @@ class PlayingArea extends Component {
   }
 
   startGame() {
+    clearInterval(this.timeLeftInterval);
     this.initTimeInterval();
 
     this.setState({
+      score: 0,
       timeLeft: defaultTimeLeft,
       snakeSpeed: defaultSnakeSpeed,
       isPlaying: true,
@@ -79,6 +81,8 @@ class PlayingArea extends Component {
   }
 
   gameOver(squares) {
+    clearInterval(this.timeLeftInterval);
+
     const coords = this.getFoodCoords(squares);
 
     this.setState( prev => ({
@@ -112,7 +116,7 @@ class PlayingArea extends Component {
             snakeSpeed -= 0.01
           } else {
             hasReachedMaxSpeed = true;
-            timeLeft = 'MAX SPEED';
+            timeLeft = -1;
           }
 
           this.setState({
@@ -157,6 +161,11 @@ class PlayingArea extends Component {
 
   getTimeLeft() {
     const seconds = this.state.timeLeft;
+
+    // Return parsed eternity sign
+    if ( seconds === -1 ) {
+      return ( new DOMParser()).parseFromString(`<!doctype html><body>&#8734;`, 'text/html').body.textContent;
+    }
 
     return `${seconds < 10 ? `0${seconds}` : seconds}`;
   }
