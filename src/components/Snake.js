@@ -59,6 +59,30 @@ class Snake extends Component {
   componentDidMount() {
     // Start moving the snake
     this.setMovingInterval(this.state.speed);
+    
+    // Manage arrow keys gameplay, because react-key-handler does not work properly
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp' || 'Up':
+          this.directionToUp()
+          break;
+  
+        case 'ArrowRight' || 'Right':
+          this.directionToRight()
+          break;
+  
+        case 'ArrowDown' || 'Down':
+          this.directionToDown()
+          break;
+  
+        case 'ArrowLeft' || 'Left':
+          this.directionToLeft()
+          break;
+          
+        default:
+          break;
+      }
+    })
   }
 
   componentWillUnmount() {
@@ -244,22 +268,34 @@ class Snake extends Component {
   }
 
   directionToUp(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault()
+    }
+
     this.setHeadDirection('up');
   };
 
   directionToRight(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault()
+    }
+
     this.setHeadDirection('right');
   };
 
   directionToDown(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault()
+    }
+
     this.setHeadDirection('down');
   };
 
   directionToLeft(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault()
+    }
+
     this.setHeadDirection('left');
   };
   
@@ -284,10 +320,11 @@ class Snake extends Component {
 
     return (
       <Fragment>
-        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowUp" onKeyHandle={this.directionToUp} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowRight" onKeyHandle={this.directionToRight} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowDown" onKeyHandle={this.directionToDown} />
-        <KeyHandler keyEventName={KEYPRESS} keyValue="ArrowLeft" onKeyHandle={this.directionToLeft} />
+        {/* With gaming keys */}
+        <KeyHandler keyEventName={KEYPRESS} keyValue="w" onKeyHandle={this.directionToUp} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="d" onKeyHandle={this.directionToRight} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="s" onKeyHandle={this.directionToDown} />
+        <KeyHandler keyEventName={KEYPRESS} keyValue="a" onKeyHandle={this.directionToLeft} />
 
         {squares !== undefined && squares.length > 0 && squares.map( (square, key) => (
           <Square key={key} {...square} />
