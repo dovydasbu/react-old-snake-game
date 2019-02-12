@@ -14,7 +14,7 @@ body {
 #game,
 .fullscreen {
     height: inherit;
-    background: #00e640;
+    background: #dfdfdf;
 }
 
 @keyframes blinker {

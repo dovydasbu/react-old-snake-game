@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
+
 import { getRandomWidth, getRandomHeight } from '../Random'
 import Snake, { defaultSquares } from './Snake'
 import Food from './Food'
@@ -13,6 +14,7 @@ export const areaParams = {
 };
 
 const Area = styled.div`
+  background: #37dc65;
   border: 6px solid #24252a;
   width: ${areaParams.width}px;
   height: ${areaParams.height}px;
@@ -36,6 +38,7 @@ class PlayingArea extends Component {
     super(props);
 
     this.state = {
+      isHamburgerActive: false,
       snakeSpeed: defaultSnakeSpeed,
       timeLeft: defaultTimeLeft, // Time left before speed increase
       score: 0,

@@ -10,7 +10,7 @@ const Square = styled.div.attrs({
 })`
   width: 18px;
   height: 18px;
-  border: 1px solid #00e640;
+  border: 1px solid #37dc65;
   background: #24252a;
   position: absolute;
   
