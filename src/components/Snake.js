@@ -41,6 +41,8 @@ export const defaultSquares = () => [
 class Snake extends Component {
   constructor(props) {
     super(props);
+    
+    this._isMounted = false
 
     this.state = {
       speed: this.props.speed, // in seconds
@@ -57,6 +59,8 @@ class Snake extends Component {
   }
 
   componentDidMount() {
+    this._isMounted = true
+    
     // Start moving the snake
     this.setMovingInterval(this.state.speed);
     
@@ -86,6 +90,7 @@ class Snake extends Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false
     clearInterval(this.movingInterval);
   }
 
@@ -130,7 +135,7 @@ class Snake extends Component {
 
       squares.unshift({ x: newX, y: newY, direction: direction });
     }
-
+  
     this.setState({ squares: squares });
   }
 
@@ -161,7 +166,7 @@ class Snake extends Component {
 
         return square;
       });
-
+  
       this.setState({ squares: squares, keyStack: keyStack, speed: speed });
     }
   }
@@ -311,8 +316,8 @@ class Snake extends Component {
 
       return null;
     });
-
-    this.setState({ keyStack: keyStack });
+  
+    this._isMounted && this.setState({ keyStack: keyStack });
   }
 
   render() {
