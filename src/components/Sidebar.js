@@ -22,6 +22,22 @@ const SidebarWrap = styled.div`
 
 const Inner = styled.div`
   padding: 70px 20px 20px;
+  
+  @media(max-width: 1000px) {
+    font-size: 20px;
+  }
+  
+  @media(max-width: 710px) {
+    font-size: 30px;
+  }
+`
+
+const ListStyled = styled.ul`
+  ${props => props.hiddenOnPhone && `
+    @media (hover: none) {
+      display: none;
+    }
+  `}
 `
 
 const Sidebar = ({ isOpen }) => (
@@ -38,6 +54,10 @@ const Sidebar = ({ isOpen }) => (
         <li>s goes &darr;</li>
         <li>a goes &larr;</li>
       </ul>
+      
+      <ListStyled hiddenOnPhone>
+        <li>P for pause</li>
+      </ListStyled>
     </Inner>
   </SidebarWrap>
 )

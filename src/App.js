@@ -20,6 +20,10 @@ const FullscreenBtn = styled(Button)`
   position: absolute;
   top: 20px;
   right: 20px;
+  
+  @media(max-width: 1900px) {
+    display: none;
+  }
 `
 
 const HamburgerBtn = styled(Button)`
@@ -54,11 +58,15 @@ class App extends Component {
   }
 
   toggleFullScreen() {
-    this.setState({ isFullScreen: ! this.state.isFullScreen });
+    this.setState((prevState) => ({
+      isFullScreen: ! prevState.isFullScreen
+    }));
   }
-
+  
   toggleSidebar() {
-    this.setState({ isSidebarOpen: ! this.state.isSidebarOpen });
+    this.setState((prevState) => ({
+      isSidebarOpen: ! prevState.isSidebarOpen
+    }))
   }
 
   render() {
@@ -67,7 +75,11 @@ class App extends Component {
     return (
       <GameWrap>
         <div>
-          <HamburgerBtn onClick={this.toggleSidebar} text="?" type="hamburger" />
+          { isSidebarOpen ? (
+            <HamburgerBtn onClick={this.toggleSidebar} text="X" type="hamburger" />
+          ) : (
+            <HamburgerBtn onClick={this.toggleSidebar} text="?" type="hamburger" />
+          )}
 
           <FullscreenBtn onClick={this.toggleFullScreen} text="Fullscreen" type="fullscreen" />
           
