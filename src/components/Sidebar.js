@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React  from 'react'
 import styled from 'styled-components'
 
 const SidebarWrap = styled.div`
@@ -24,32 +24,22 @@ const Inner = styled.div`
   padding: 70px 20px 20px;
 `
 
-class Sidebar extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  render() {
-    const { isOpen } = this.props;
-
-    return (
-      <SidebarWrap className={isOpen ? 'is-open' : ''}>
-        <Inner>
-          <h2>Controls</h2>
-          <ul>
-            <li>With arrow keys</li>
-          </ul>
-          
-          <ul>
-            <li>w goes &uarr;</li>
-            <li>d goes &rarr;</li>
-            <li>s goes &darr;</li>
-            <li>a goes &larr;</li>
-          </ul>
-        </Inner>
-      </SidebarWrap>
-    )
-  }
-}
+const Sidebar = ({ isOpen }) => (
+  <SidebarWrap className={isOpen ? 'is-open' : ''}>
+    <Inner>
+      <h2>Controls</h2>
+      <ul>
+        <li>With arrow keys</li>
+      </ul>
+      
+      <ul>
+        <li>w goes &uarr;</li>
+        <li>d goes &rarr;</li>
+        <li>s goes &darr;</li>
+        <li>a goes &larr;</li>
+      </ul>
+    </Inner>
+  </SidebarWrap>
+)
 
 export default Sidebar

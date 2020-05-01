@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import KeyHandler, { KEYPRESS } from 'react-key-handler';
-import Fullscreen from "react-full-screen";
+import Fullscreen from "react-full-screen"
 
 import PlayingArea from './components/PlayingArea'
 import Button from './components/Button'
