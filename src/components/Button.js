@@ -14,14 +14,16 @@ const Btn = styled.button`
   cursor: pointer;
   color: #24252a;
   
-  &:hover {
-    color: #37dc65;
-    background: #24252a;
+  @media (hover: none and min-width 1600px) {
+    &:hover {
+      color: #37dc65;
+      background: #24252a;
+    }
   }
 `;
 
-const Button = ({ text, ...rest }) => (
-  <Btn {...rest}>{text}</Btn>
+const Button = ({ text, children, ...props }) => (
+  <Btn {...props}>{text || children}</Btn>
 );
 
 export default Button

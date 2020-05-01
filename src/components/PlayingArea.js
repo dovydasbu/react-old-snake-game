@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react'
 import KeyHandler, { KEYPRESS } from 'react-key-handler';
 import styled from 'styled-components'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUp, faArrowRight, faArrowDown, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { getRandomWidth, getRandomHeight } from '../Random'
 import Snake, { defaultSquares } from './Snake'
 import Food from './Food'
 import Scores from './Scores'
 import GameMessage from './GameMessage'
+import Button from "./Button"
 
 export const areaParams = {
   width: 800,
@@ -28,6 +30,37 @@ const Area = styled.div`
     align-items: center;
   `: ''}
 `;
+
+const ButtonsWrap  = styled.div`
+  display: flex;
+  z-index: 9999;
+  position: relative;
+  margin-top: 20px;
+  margin-bottom: 20px;
+`
+
+const SnakeButton = styled(Button)`
+  min-width: 25%;
+  min-height: 70px;
+  margin-top: 0;
+  
+  ${props => props.fullWidth && `
+    width: 100%;
+  `}
+  
+  ${props => props.mt && `
+    margin-top: 20px;
+  `}
+  
+  ${props => props.leftSide && `
+    margin-right: 15px;
+  `}
+  
+  ${props => props.rightSide && `
+    margin-left: 15px;
+  `}
+`
+
 
 // Time left before speed increase
 export const defaultTimeLeft = 15;
@@ -180,6 +213,32 @@ class PlayingArea extends Component {
 
     return `${seconds < 10 ? `0${seconds}` : seconds}`;
   }
+  
+  static triggerEvent(key) {
+    const keyboardEvent = document.createEvent("KeyboardEvent");
+    const initMethod = typeof keyboardEvent.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
+    
+    keyboardEvent[initMethod](
+      "keydown", // event type: keydown, keyup, keypress
+      true,      // bubbles
+      true,      // cancelable
+      window,    // view: should be window
+      false,     // ctrlKey
+      false,     // altKey
+      false,     // shiftKey
+      false,     // metaKey
+      40,        // keyCode: unsigned long - the virtual key code, else 0
+      0          // charCode: unsigned long - the Unicode character associated with the depressed key, else 0
+    );
+  
+    Object.defineProperty(keyboardEvent, 'key', {
+      get: () => {
+        return key
+      }
+    })
+    
+    document.dispatchEvent(keyboardEvent);
+  }
 
   render() {
     const { score, snakeSpeed, isPlaying, isGameOver, isPause, isTimeBlinking, isScoreBlinking, foodPosition } = this.state;
@@ -214,6 +273,17 @@ class PlayingArea extends Component {
             <GameMessage title="Snake game" btnClick={this.startGame} btnText="play" />
           )}
         </Area>
+        
+        <ButtonsWrap>
+          <SnakeButton leftSide onClick={() => PlayingArea.triggerEvent('Left')}><FontAwesomeIcon icon={faArrowLeft} /></SnakeButton>
+          
+          <div style={{width: '100%'}}>
+            <SnakeButton fullWidth onClick={() => PlayingArea.triggerEvent('Up')}><FontAwesomeIcon icon={faArrowUp} /></SnakeButton>
+            <SnakeButton fullWidth mt onClick={() => PlayingArea.triggerEvent('Down')}><FontAwesomeIcon icon={faArrowDown} /></SnakeButton>
+          </div>
+          
+          <SnakeButton rightSide onClick={() => PlayingArea.triggerEvent('Right')}><FontAwesomeIcon icon={faArrowRight} /></SnakeButton>
+        </ButtonsWrap>
       </Fragment>
     )
   }

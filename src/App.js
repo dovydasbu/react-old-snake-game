@@ -8,6 +8,7 @@ import Sidebar from './components/Sidebar'
 
 const GameWrap = styled.div`;
   height: inherit;
+  min-height: inherit;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,6 +35,7 @@ const HamburgerBtn = styled(Button)`
   left: 20px;
   z-index: 99;
   font-weight: 700;
+  z-index: 999999;
 `
 
 class App extends Component {

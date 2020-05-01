@@ -67,22 +67,38 @@ class Snake extends Component {
     // Manage arrow keys gameplay, because react-key-handler does not work properly
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
-        case 'ArrowUp' || 'Up':
+        case 'ArrowUp':
           this.directionToUp()
           break;
-  
-        case 'ArrowRight' || 'Right':
+          
+        case 'Up':
+          this.directionToUp()
+          break;
+
+        case 'ArrowRight':
           this.directionToRight()
           break;
-  
-        case 'ArrowDown' || 'Down':
+
+        case 'Right':
+          this.directionToRight()
+          break;
+
+        case 'ArrowDown':
           this.directionToDown()
           break;
-  
-        case 'ArrowLeft' || 'Left':
+
+        case 'Down':
+          this.directionToDown()
+          break;
+
+        case 'ArrowLeft':
           this.directionToLeft()
           break;
-          
+
+        case 'Left':
+          this.directionToLeft()
+          break;
+
         default:
           break;
       }

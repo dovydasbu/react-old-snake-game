@@ -13,6 +13,7 @@ const SidebarWrap = styled.div`
   border-right: 6px solid #24252a;
   z-index: 9;
   transition: left .2s;
+  z-index: 99999;
   
   &.is-open {
     left: 0;

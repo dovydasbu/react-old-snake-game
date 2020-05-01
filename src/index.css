@@ -7,13 +7,15 @@
 
 body {
     margin: 0;
-    height: 100vh;
+    min-height: 100vh;
+    height: 100%;
     color: #24252a;
 }
 
 #game,
 .fullscreen {
     height: inherit;
+    min-height: inherit;
     background: #dfdfdf;
 }
 
