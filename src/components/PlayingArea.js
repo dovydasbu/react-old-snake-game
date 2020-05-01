@@ -16,8 +16,8 @@ export const areaParams = {
 const Area = styled.div`
   background: #37dc65;
   border: 6px solid #24252a;
-  width: ${areaParams.width}px;
-  height: ${areaParams.height}px;
+  width: ${props => props.areaParams.width}px;
+  height: ${props => props.areaParams.height}px;
   position: relative;
   box-shadow: 0 11px 70px rgba(0,0,0,0.515);
   margin: 0 auto;
@@ -67,20 +67,28 @@ class PlayingArea extends Component {
     clearInterval(this.timeLeftInterval);
     this.initTimeInterval();
 
-    this.setState({
+    this.setState(prevState => ({
       score: 0,
-      timeLeft: defaultTimeLeft,
+      timeLeft: prevState.timeLeft || defaultTimeLeft,
       snakeSpeed: defaultSnakeSpeed,
       isPlaying: true,
       isGameOver: false,
       isPause: false
-    });
+    }));
   }
 
   pauseGame() {
-    this.setState( prev => ({
+    this.setState( prev => {
+      if (!prev.isPause) {
+        clearInterval(this.timeLeftInterval);
+      } else {
+        this.initTimeInterval()
+      }
+      
+      return {
         isPause: prev.isPlaying && ! prev.isGameOver ? ! prev.isPause : prev.isPause
-    }));
+      }
+    });
   }
 
   gameOver(squares) {
@@ -180,7 +188,7 @@ class PlayingArea extends Component {
       <Fragment>
         <Scores score={score} timeLeft={this.getTimeLeft()} isTimeBlinking={isTimeBlinking} isScoreBlinking={isScoreBlinking} />
 
-        <Area>
+        <Area areaParams={areaParams}>
           <KeyHandler keyEventName={KEYPRESS} keyValue="Enter" onKeyHandle={this.startGame} />
           <KeyHandler keyEventName={KEYPRESS} keyValue="Spacebar" onKeyHandle={this.startGame} />
           <KeyHandler keyEventName={KEYPRESS} keyValue=" " onKeyHandle={this.startGame} />
