@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Joystix';
+    src: url('./assets/fonts/joystix monospace.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    height: 100%;
+    color: #24252a;
+}
+
+#game,
+.fullscreen {
+    height: inherit;
+    min-height: inherit;
+    background: #dfdfdf;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}

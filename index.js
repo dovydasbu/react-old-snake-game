@@ -1,4 +1,3 @@
-import React from 'react'
-import App from './src/App'
+import App from './dist/App'
 
 export default App

@@ -5,28 +5,40 @@
   "repository": "https://github.com/dovydasbu/react-snake.git",
   "author": "dovydasbu",
   "license": "MIT",
+  "main": "./dist/App.js",
   "private": false,
+  "peerDependencies": {
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1",
     "react-full-screen": "^0.2.3",
     "react-key-handler": "^1.2.0-beta.3",
-    "styled-components": "^4.0.3"
+    "styled-components": "^4.0.3",
+    "react-scripts": "^3.4.1"
   },
   "devDependencies": {
-    "react-scripts": "^3.4.1"
+    "@babel/cli": "^7.8.4",
+    "@babel/preset-react": "^7.9.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build"
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "publish:npm": "rm -rf dist && mkdir dist &&  babel src -d dist --copy-files"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  }
 }
