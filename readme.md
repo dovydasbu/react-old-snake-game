@@ -6,8 +6,8 @@ React based snake game. Main purpose - use as little packages as possible to gra
 ## Installation
 
 ```bash
-yarn install
-yarn run start
+npm install
+npm run start
 ```
 
 ## Controls
