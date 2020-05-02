@@ -5,7 +5,7 @@
   "repository": "https://github.com/dovydasbu/react-snake.git",
   "author": "dovydasbu",
   "license": "MIT",
-  "main": "./dist/App.js",
+  "main": "./dist/index.js",
   "private": false,
   "peerDependencies": {
     "react": "^16.6.1"
