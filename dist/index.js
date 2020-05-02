@@ -1,3 +1,3 @@
 import App from './App';
-import './index.css';
+import './assets/css/index.css';
 export default App;
