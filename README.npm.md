@@ -3,10 +3,7 @@ React based snake game. Main purpose - use as little packages as possible to gra
 ## Installation
 
 ```bash
-git clone git@github.com:dovydasbu/react-old-snake-game.git
-cd react-old-snake-game
-yarn
-yarn start
+yarn add react-old-snake-game
 ```
 
 And you should import styles
