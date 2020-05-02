@@ -8,8 +8,7 @@
   "main": "./dist/App.js",
   "private": false,
   "peerDependencies": {
-    "react": "^16.6.1",
-    "react-dom": "^16.6.1"
+    "react": "^16.6.1"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
