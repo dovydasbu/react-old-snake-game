@@ -1,13 +1,15 @@
 React based snake game. Main purpose - use as little packages as possible to grasp basic main principles of plain react.
 
-## View
-![alt text](http://i67.tinypic.com/23w16ar.jpg)
-
 ## Installation
 
 ```bash
-npm install
-npm run start
+yarn add react-old-snake-game
+```
+
+And you should import styles
+
+```bash
+import 'react-old-snake-game/dist/assets/css/index.css'
 ```
 
 ## Controls

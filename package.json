@@ -7,27 +7,30 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "private": false,
-  "peerDependencies": {
-    "react": "^16.6.1"
-  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
+    "css-loader": "^3.5.3",
+    "react": "^16.6.1",
     "react-full-screen": "^0.2.3",
     "react-key-handler": "^1.2.0-beta.3",
-    "react-scripts": "^3.4.1",
+    "style-loader": "^1.2.1",
     "styled-components": "^4.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
-    "@babel/preset-react": "^7.9.4"
+    "@babel/core": "^7.7.5",
+    "@babel/preset-react": "^7.9.4",
+    "babel-loader": "^8.0.6",
+    "copy-webpack-plugin": "^5.1.1",
+    "file-loader": "^6.0.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "eject": "react-scripts eject",
-    "publish:npm": "rm -rf dist && mkdir dist &&  babel src -d dist --copy-files"
+    "start": "webpack --watch",
+    "build": "webpack"
   },
   "browserslist": [
     ">0.2%",
